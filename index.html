@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מדפסת מרחוק</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <img src="hero.jpg" alt="תמונת הירו">
+      <div class="overlay">
+        <h1>ברוכים הבאים למדפסת מרחוק</h1>
+        <p>הדפסת תלת מימד לכל מטרה</p>
+      </div>
+    </section>
+<section class="mode-chooser" id="modeChooserTop">
+  <button id="chooseExisting" class="mode-option active" data-mode="existing">בחירת מודל קיים</button>
+  <button id="createNew" class="mode-option alt" data-mode="new">יצירת מודל חדש</button>
+</section>
+<section id="galleryTop" class="models-grid"></section>
+
+
+    <header class="site-header">
+<p>רוצים להדפיס בתלת מימד ואין לכם מדפסת, אני מדפיס לכם בשניה ולא יעלה יותר מ 80 ש"ח</p>
+    </header>
+
+    <ol class="steps" id="stepsPills" style="display:none" style="display:none">
+      <li data-step="1">שלב 1 - תיאור המוצר</li>
+      <li data-step="2">שלב 2 - צבע</li>
+      <li data-step="3">שלב 3 - גודל</li>
+      <li data-step="4">שלב 4 - קשיחות המוצר</li>
+      <li data-step="5">שלב 5 - רזולוציה</li>
+      <li data-step="6">שלב 6 - מחיר</li>
+      <li data-step="7">שלב 7 - עוד פרטים</li>
+      <li data-step="8">שלב אחרון</li>
+    </ol>
+
+    <section id="card" class="card" style="display:none" style="display:none">
+      <!-- Step 1 -->
+      <div class="step" data-step="1">
+        <h2>שלב 1 - תיאור המוצר</h2>
+
+        <div class="new-model-wrap">
+          <label>תארו בקצרה את ההדפסה המבוקשת, עד 400 תווים</label>
+          <textarea id="desc" rows="4" maxlength="400" placeholder="למשל: מחזיק מפתחות עם שם 'מעיין' בגודל קטן"></textarea>
+          <div class="small muted"><span id="descCount">0</span> / 400</div>
+
+          <div class="mt">
+            <label>העלאת תמונה להשראה או קובץ ייחוס</label>
+            <input id="image" type="file" accept="image/*">
+            <img id="preview" class="preview" alt="תצוגה מקדימה" style="display:none;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step" data-step="2">
+        <h2>שלב 2 - צבע</h2>
+        <label class="radio"><input type="radio" name="color" value="colorful" checked> צבעוני, מה שיוצא אני מרוצה</label>
+        <label class="radio"><input type="radio" name="color" value="white"> לבן</label>
+        <label class="radio disabled"><input type="radio" name="color" value="black_unavailable" disabled> שחור, אין כרגע במלאי</label>
+        <label class="radio disabled"><input type="radio" name="color" value="macaron_soon" disabled> צבע מקרון, בקרוב</label>
+        <div class="custom-color">
+          <label class="radio"><input type="radio" name="color" value="custom"> צבע לבחירתך, ננסה לספק</label>
+          <input id="customColorText" class="input" type="text" placeholder="כתבו את שם הצבע" disabled>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step" data-step="3">
+        <h2>שלב 3 - גודל</h2>
+        <div class="grid">
+          <div>
+            <label>רוחב במ"מ</label>
+            <input id="width" type="number" min="1" max="100" value="50">
+            <div class="small note-red">המחיר של ההדפסה יהיה תלוי בגודל המוצר</div>
+          </div>
+          <div>
+            <label>גובה במ"מ</label>
+            <input id="height" type="number" min="1" max="100" value="50">
+            <div class="small muted">&nbsp;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step" data-step="4">
+        <h2>שלב 4 - קשיחות המוצר</h2>
+        <label class="radio"><input type="radio" name="difficulty" value="under50" checked> קלה (לנוי)</label>
+        <label class="radio"><input type="radio" name="difficulty" value="above50"> בינונית (לשימוש)</label>
+        <label class="radio"><input type="radio" name="difficulty" value="full100"> חייב להחזיק משקל</label>
+        <p class="small note-red">המחיר של ההדפסה יהיה תלוי בקשיחות המוצר</p>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step" data-step="5">
+        <h2>שלב 5 - רזולוציה</h2>
+        <label class="radio"><input type="radio" name="resolution" value="low"> נמוכה</label>
+        <label class="radio"><input type="radio" name="resolution" value="medium" checked> בינונית (מומלץ)</label>
+        <label class="radio"><input type="radio" name="resolution" value="high"> גבוהה (לעבודות עדינות בלבד)</label>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step" data-step="6">
+        <h2>שלב 6 - מחיר</h2>
+        <div id="priceBox" class="price-box">
+          <div class="row"><span>בסיס לפי גודל</span><span id="basePrice">0</span></div>
+          <div class="row"><span>תוספת לפי קשיחות המוצר</span><span id="difficultyExtra">0</span></div>
+          <div class="row"><span>תוספת לפי רזולוציה</span><span id="resolutionExtra">0</span></div>
+          <hr>
+          <div class="row total"><span>סה&quot;כ</span><span id="totalPrice">0</span></div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="step" data-step="7">
+        <h2>שלב 7 - עוד פרטים</h2>
+        <textarea id="notes" rows="4" placeholder="פרטים נוספים, מועדי איסוף, הערות מיוחדות"></textarea>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="step" data-step="8">
+        <h2>משלוח, פרטי קשר ותשלום</h2>
+        <div class="grid">
+          <div>
+            <label>שם</label>
+            <input id="firstName" type="text" placeholder="שם פרטי" required>
+          </div>
+          <div>
+            <label>שם משפחה</label>
+            <input id="lastName" type="text" placeholder="שם משפחה" required>
+          </div>
+          <div>
+            <label>מייל</label>
+            <input id="email" type="email" placeholder="name@example.com" required>
+          </div>
+          <div>
+            <label>טלפון</label>
+            <input id="phone" type="tel" placeholder="05x-xxxxxxx" required>
+          </div>
+        </div>
+
+        <div class="notice amber mt">בשלב זה ההדפסות ייאספו באופן עצמאי בלבד</div>
+        <div class="notice sky mt">התשלום יתבצע במזומן או בביט או PayBox</div>
+
+        <div id="priceBox2" class="price-box mt">
+          <div class="row"><span>בסיס לפי גודל</span><span id="basePrice2">0</span></div>
+          <div class="row"><span>תוספת לפי קשיחות המוצר</span><span id="difficultyExtra2">0</span></div>
+          <div class="row"><span>תוספת לפי רזולוציה</span><span id="resolutionExtra2">0</span></div>
+          <hr>
+          <div class="row total"><span>סה&quot;כ</span><span id="totalPrice2">0</span></div>
+        </div>
+
+        <button id="submitBtn" class="btn whatsapp full mt">
+          <span class="wa-icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" role="img" focusable="false">
+              <path d="M19.11 17.43c-.27-.14-1.6-.8-1.84-.89-.24-.09-.42-.14-.6.14-.18.27-.69.89-.85 1.07-.16.18-.31.2-.58.07-.27-.14-1.13-.42-2.15-1.34-.79-.7-1.32-1.57-1.47-1.84-.15-.27-.02-.42.11-.56.12-.12.27-.31.4-.47.13-.16.18-.27.27-.45.09-.18.05-.34-.02-.47-.07-.14-.6-1.45-.82-1.98-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02s-.47.07-.72.34c-.25.27-.95.93-.95 2.28 0 1.35.98 2.65 1.12 2.83.14.18 1.93 2.95 4.67 4.02.65.28 1.16.45 1.56.58.65.21 1.24.18 1.71.11.52-.08 1.6-.65 1.83-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32z"/><path d="M16.01 2.93C9.4 2.93 4.03 8.3 4.03 14.91c0 2.34.77 4.5 2.07 6.26L4 29.07l7.03-2.04c1.7.93 3.65 1.46 5.72 1.46 6.61 0 11.98-5.37 11.98-11.98S22.62 2.93 16.01 2.93zm0 21.6c-1.85 0-3.58-.54-5.02-1.47l-.36-.23-4.17 1.21 1.2-4.06-.24-.37c-1.18-1.63-1.87-3.64-1.87-5.8 0-5.46 4.44-9.9 9.9-9.9s9.9 4.44 9.9 9.9-4.44 9.9-9.9 9.9z"/>
+            </svg>
+          </span>
+          שליחה לוואטסאפ
+        </button>
+        <div id="thankYou" class="thankyou" style="display:none">
+          תודה שהזמנת מאיתנו, אנו ניצור אתך קשר תוך 4 ימים כשההדפסה שלך תהיה מוכנה
+        </div>
+      </div>
+    </section>
+
+    <nav class="footer-nav" id="stepsNav" style="display:none" id="stepsNav" style="display:none">
+      <button id="backBtn" class="btn sky">אחורה</button>
+      <span class="muted">שלב <span id="stepNum">1</span> מתוך 8</span>
+      <button id="nextBtn" class="btn green">הבא</button>
+    </nav>
+
+    <div class="tiny muted center mt">אזור ניהול: <a href="admin.html">העלאת מודלים ותיאורים</a></div>
+  
+<button id="backToExistingFab" class="fab" style="display:none" title="חזרה למודלים קיימים">↩︎ חזרה למודלים</button>
+
+    <button id="backToGallery" class="back-floating" title="חזרה למודלים">↩︎ חזרה למודלים</button>
+  </main>
+
+  <script>window.DEFAULT_MODELS = [
+  {"id":"cat","title":"cat","description":"מחזיק מפתחות חתול 15מ״מ על 15 מ״מ","image":"cat.jpeg","price":30},
+  {"id":"boat","title":"boat","description":"מודל סירה בסיסי 25 מ״מ על 25 מ״מ","image":"boat.jpeg","price":30}
+];</script>
+  <script>(function(){try{var h=localStorage.getItem("adminHeroImage");if(h){var img=document.querySelector(".hero img"); if(img) img.src=h;}}catch(e){}})();</script>
+<script src="script.js"></script>
+
+<!-- WhatsApp summary logic v1 -->
+<script>
+(function(){
+  'use strict';
+  try{
+    var SELLER_PHONE = '972522010267';
+
+    function textOf(sel){
+      var el = document.querySelector(sel);
+      return el ? (el.textContent || el.value || '').toString().trim() : '';
+    }
+
+    function selectedRadio(name){
+      var el = document.querySelector('input[name="'+name+'"]:checked');
+      if (!el) return null;
+      // Prefer nearby label text
+      var label = el.closest('label');
+      var labelText = label ? (label.textContent || '').trim() : '';
+      return { value: el.value, label: labelText || el.value };
+    }
+
+    function getSelectedModel(){
+      try{
+        var raw = localStorage.getItem('selectedModel');
+        if (!raw) return null;
+        var obj = JSON.parse(raw);
+        return obj;
+      }catch(e){ return null; }
+    }
+
+    function buildPriceLines(){
+      var base = textOf('#basePrice2');
+      var diff = textOf('#difficultyExtra2');
+      var res  = textOf('#resolutionExtra2');
+      var total= textOf('#totalPrice2');
+      var lines = [];
+      if (base) lines.push('בסיס לפי גודל: ' + base + ' ₪');
+      if (diff) lines.push('תוספת קשיחות: ' + diff + ' ₪');
+      if (res)  lines.push('תוספת רזולוציה: ' + res + ' ₪');
+      if (total) lines.push('סה״כ לתשלום: ' + total + ' ₪');
+      return { lines: lines, total: total };
+    }
+
+    function buildMessage(){
+      var parts = [];
+
+      parts.push('הזמנה חדשה מ־MyKidT');
+      parts.push('————————');
+
+      var sel = getSelectedModel();
+      if (sel && (sel.title || sel.description)){
+        parts.push('מודל קיים: ' + (sel.title || ''));
+        if (sel.description) parts.push('תיאור המודל: ' + sel.description);
+      }
+
+      var freeDesc = textOf('#desc');
+      if (freeDesc) parts.push('תיאור חופשי: ' + freeDesc);
+
+      var col = selectedRadio('color');
+      if (col){
+        var label = col.label.replace(/\s*\(.*?\)\s*$/, ''); // clean hints
+        if (col.value === 'custom'){
+          var ctext = (document.getElementById('customColorText')?.value || '').trim();
+          if (ctext) label += ' – ' + ctext;
+        }
+        parts.push('צבע: ' + label);
+      }
+
+      var w = (document.getElementById('width')?.value || '').trim();
+      var h = (document.getElementById('height')?.value || '').trim();
+      if (w || h) parts.push('ממדים במ״מ: ' + (w || '?') + ' × ' + (h || '?'));
+
+      var diff = selectedRadio('difficulty');
+      if (diff) parts.push('קשיחות המוצר: ' + diff.label);
+
+      var res = selectedRadio('resolution');
+      if (res) parts.push('רזולוציה: ' + res.label);
+
+      var notes = textOf('#notes');
+      if (notes) parts.push('הערות: ' + notes);
+
+      parts.push('————————');
+      var price = buildPriceLines();
+      if (price.lines.length) parts = parts.concat(price.lines);
+
+      var fn = (document.getElementById('firstName')?.value || '').trim();
+      var ln = (document.getElementById('lastName')?.value || '').trim();
+      var em = (document.getElementById('email')?.value || '').trim();
+      var ph = (document.getElementById('phone')?.value || '').trim();
+
+      var who = [];
+      if (fn || ln) who.push('שם: ' + [fn, ln].filter(Boolean).join(' '));
+      if (em) who.push('מייל: ' + em);
+      if (ph) who.push('טלפון: ' + ph);
+      if (who.length){
+        parts.push('————————');
+        parts = parts.concat(who);
+      }
+
+      return parts.join('\n');
+    }
+
+    function buildWaLink(phone, text){
+      var ua = navigator.userAgent || '';
+      var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+      if (!isMobile){
+        return 'https://web.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(text);
+      }
+      return 'https://wa.me/' + phone + '?text=' + encodeURIComponent(text);
+    }
+
+    function init(){
+      var btn = document.getElementById('submitBtn');
+      if (!btn || btn.__waHooked) return;
+      btn.addEventListener('click', function(evt){ try{ evt.preventDefault && evt.preventDefault(); }catch(e){} 
+        var msg = buildMessage();
+        var url = buildWaLink(SELLER_PHONE, msg);
+        window.open(url, '_blank');
+        // Optional thank-you view toggle if exists
+        var thanks = document.getElementById('thankYou');
+        if (thanks) { try{ thanks.style.display = ''; }catch(e){} }
+      });
+      btn.__waHooked = true;
+    }
+
+    if (document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', init);
+    }else{
+      init();
+    }
+  }catch(e){}
+})();
+</script>
+
+
+<script>
+(function(){
+  'use strict';
+  var PHONE='972522010267';
+  function waUrl(msg){
+    var isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent||'');
+    var enc=encodeURIComponent(msg||'נכנסה הזמנת הדפסה חדשה למעין');
+    return isMobile ? ('https://wa.me/'+PHONE+'?text='+enc)
+                    : ('https://web.whatsapp.com/send?phone='+PHONE+'&text='+enc);
+  }
+  function onClick(e){
+    var t=e.target;
+    if(!t) return;
+    var btn = (t.id==='submitBtn') ? t : (t.closest && t.closest('#submitBtn'));
+    if(!btn) return;
+    try{ e.preventDefault && e.preventDefault(); }catch(_){}
+    var msg='נכנסה הזמנת הדפסה חדשה למעין';
+    try{
+      if (typeof buildMessage==='function'){
+        msg = buildMessage();
+      } else if (typeof __buildFullMessageFailsafe==='function'){
+        msg = __buildFullMessageFailsafe();
+      }
+    }catch(_){
+      try{ msg = __buildFullMessageFailsafe(); }catch(__){ msg='נכנסה הזמנת הדפסה חדשה למעין'; }
+    }
+    if(!msg || !/\S/.test(msg)){ try{ msg=__buildFullMessageFailsafe(); }catch(__){} }
+    var url=waUrl(msg);
+    var w=null; try{ w=window.open(url,'_blank'); }catch(_){}
+    if(!w){ try{ window.location.href=url; }catch(__){} }
+    // Optional: show thank you if exists
+    try{ var thanks=document.getElementById('thankYou'); if(thanks) thanks.style.display=''; }catch(_){}
+  }
+  // inject our builder (safe to re-define alongside others)
+  try{
+    var tag=document.createElement('script');
+    tag.type='text/javascript';
+    tag.textContent = ('\nfunction __buildFullMessageFailsafe(){\n  function byId(id){ var el=document.getElementById(id); return el ? (el.value!==undefined? String(el.value): String(el.textContent||\'\')).trim():\'\'; }\n  function selText(sel){ var el=document.querySelector(sel); return el ? (el.textContent||\'\').trim():\'\'; }\n  function pick(name){\n    var el=document.querySelector(\'input[name="\'+name+\'"]:checked\');\n    if(!el) return \'\';\n    var lab=el.closest(\'label\'); var t=(lab?(lab.textContent||\'\'):el.value).trim();\n    return t.replace(/\\s*\\(.*?\\)\\s*$/,\'\');\n  }\n  function yesNo(b){ return b?\'כן\':\'לא\'; }\n\n  var parts=[\'נכנסה הזמנת הדפסה חדשה למעין\'];\n\n  var fn=byId(\'firstName\'), ln=byId(\'lastName\');\n  var customer=(fn||ln)? [fn,ln].filter(Boolean).join(\' \') : \'[לא הוזן]\';\n  parts.push(\'הזמנה מ: \'+customer);\n\n  try{ var d=new Date(); parts.push(\'תאריך: \'+String(d.getDate()).padStart(2,\'0\')+\'.\'+String(d.getMonth()+1).padStart(2,\'0\')+\'.\'+d.getFullYear()); }\n  catch(e){ parts.push(\'תאריך: [לא הוזן]\'); }\n\n  var hasFile=false; try{ var f=document.getElementById(\'imageUpload\')||document.getElementById(\'image\'); hasFile=!!(f&&f.files&&f.files.length);}catch(e){}\n  parts.push(\'קובץ מצורף: \'+yesNo(hasFile));\n\n  parts.push(\'————————\');\n\n  try{\n    var raw=localStorage.getItem(\'selectedModel\');\n    if(raw){\n      var m=JSON.parse(raw);\n      if(m&&m.title) parts.push(\'מודל קיים: \'+m.title);\n      if(m&&m.description) parts.push(\'תיאור המודל: \'+m.description);\n    }\n  }catch(e){}\n\n  var desc=byId(\'desc\'); if(desc) parts.push(\'תיאור חופשי: \'+desc);\n\n  var color=pick(\'color\');\n  if(color){\n    if(/custom/i.test(color) || /מותאם/.test(color)){\n      var ctext=byId(\'customColorText\'); if(ctext) color+=\' – \'+ctext;\n    }\n    parts.push(\'צבע: \'+color);\n  }\n\n  var w=byId(\'width\'), h=byId(\'height\');\n  if(w||h) parts.push(\'ממדים במ״מ: \'+(w||\'?\')+\' × \'+(h||\'?\'));\n\n  var diff=pick(\'difficulty\'); if(diff) parts.push(\'קשיחות המוצר: \'+diff);\n  var res =pick(\'resolution\'); if(res)  parts.push(\'רזולוציה: \'+res);\n\n  var notes=byId(\'notes\'); if(notes) parts.push(\'הערות: \'+notes);\n\n  var base=selText(\'#basePrice2\')||selText(\'#basePrice\');\n  var de  =selText(\'#difficultyExtra2\')||selText(\'#difficultyExtra\');\n  var re  =selText(\'#resolutionExtra2\')||selText(\'#resolutionExtra\');\n  var tot =selText(\'#totalPrice2\')||selText(\'#totalPrice\');\n  if(base) parts.push(\'בסיס לפי גודל: \'+base+\' ₪\');\n  if(de)   parts.push(\'תוספת קשיחות: \'+de+\' ₪\');\n  if(re)   parts.push(\'תוספת רזולוציה: \'+re+\' ₪\');\n  if(tot)  parts.push(\'סה״כ לתשלום: \'+tot+\' ₪\');\n\n  parts.push(\'————————\');\n\n  var email=byId(\'email\'), phone=byId(\'phone\');\n  parts.push(\'שם: \'+customer);\n  parts.push(\'מייל: \'+(email||\'[לא הוזן]\'));\n  parts.push(\'טלפון: \'+(phone||\'[לא הוזן]\'));\n\n  return parts.join(\'\\n\');\n}\n');
+    document.head.appendChild(tag);
+  }catch(_){}
+  // Bind capturing so it runs even if other handlers stopPropagation/bubble
+  document.addEventListener('click', onClick, true);
+})();
+</script>
+
+</body>
+</html>

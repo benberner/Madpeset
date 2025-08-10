@@ -1,3 +1,38 @@
+/* === v4.1.1 Mobile Specific Tweaks === */
+
+/* Stack color choices (step 2) and stiffness (step 4) vertically on narrow screens */
+@media (max-width: 480px) {
+  .step[data-step="2"] .radio,
+  .step[data-step="4"] .radio {
+    display: block !important;
+    margin: 8px 0 !important;
+    width: 100% !important;
+  }
+  .step[data-step="2"] .custom-color {
+    display: block !important;
+  }
+  .step[data-step="2"] .custom-color input[type="text"] {
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  /* Bigger WhatsApp send button */
+  #submitBtn.btn.whatsapp {
+    font-size: 1.05rem;
+    padding: 14px 18px;
+  }
+  #submitBtn.btn.whatsapp .wa-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Make the WhatsApp button nicely big on all screens */
+#submitBtn.btn.whatsapp {
+  min-height: 48px;
+  border-radius: 999px;
+}
+
 /* === Global font & mobile tweaks (v4.1) === */
 :root { --font-ui: 'Alef', Arial, Helvetica, sans-serif; }
 html, body { font-family: var(--font-ui); -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; }

@@ -118,6 +118,7 @@
           <div class="row"><span>בסיס לפי גודל</span><span id="basePrice">0</span></div>
           <div class="row"><span>תוספת לפי קשיחות המוצר</span><span id="difficultyExtra">0</span></div>
           <div class="row"><span>תוספת לפי רזולוציה</span><span id="resolutionExtra">0</span></div>
+          <div class="row"><span>צבע</span><span id="colorChosen">מה שיוצא אני מרוצה</span></div>
           <hr>
           <div class="row total"><span>סה&quot;כ</span><span id="totalPrice">0</span></div>
         </div>
@@ -158,6 +159,7 @@
           <div class="row"><span>בסיס לפי גודל</span><span id="basePrice2">0</span></div>
           <div class="row"><span>תוספת לפי קשיחות המוצר</span><span id="difficultyExtra2">0</span></div>
           <div class="row"><span>תוספת לפי רזולוציה</span><span id="resolutionExtra2">0</span></div>
+          <div class="row"><span>צבע</span><span id="colorChosen2">מה שיוצא אני מרוצה</span></div>
           <hr>
           <div class="row total"><span>סה&quot;כ</span><span id="totalPrice2">0</span></div>
         </div>
@@ -188,7 +190,7 @@
 
     <button id="backToGallery" class="back-floating" title="חזרה למודלים">↩︎ חזרה למודלים</button>
   
-<div class="tiny muted center mt">גרסה: v4.1.1</div>
+<div class="tiny muted center mt">גרסה: v4.1.2</div>
 </main>
 
   <script>window.DEFAULT_MODELS = [
@@ -375,6 +377,66 @@
   }catch(_){}
   // Bind capturing so it runs even if other handlers stopPropagation/bubble
   document.addEventListener('click', onClick, true);
+})();
+</script>
+
+
+<!-- v4.1.2 color line + custom color enable -->
+<script>
+(function(){
+  'use strict';
+  function $$(sel, ctx){ return Array.prototype.slice.call((ctx||document).querySelectorAll(sel)); }
+  function byId(id){ return document.getElementById(id); }
+
+  function currentColorLabel(){
+    var el = document.querySelector('input[name="color"]:checked');
+    if(!el){ return 'מה שיוצא אני מרוצה'; }
+    var label = (el.closest('label') ? el.closest('label').textContent : el.value) || '';
+    label = label.trim().replace(/\s*\(.*?\)\s*$/, '');
+    if (el.value === 'custom'){
+      var t = (byId('customColorText') && byId('customColorText').value || '').trim();
+      if (t) label += ' – ' + t;
+    }
+    return label || 'מה שיוצא אני מרוצה';
+  }
+
+  function updateColorLines(){
+    var val = currentColorLabel();
+    var c1 = byId('colorChosen');
+    var c2 = byId('colorChosen2');
+    if (c1) c1.textContent = val;
+    if (c2) c2.textContent = val;
+  }
+
+  function onColorChange(){
+    var isCustom = !!document.querySelector('input[name="color"][value="custom"]:checked');
+    var input = byId('customColorText');
+    if (input){
+      input.disabled = !isCustom;
+      input.placeholder = isCustom ? 'כתבו את שם הצבע' : 'כתבו את שם הצבע';
+      if (!isCustom){ /* optional: keep previous text but keep disabled */ }
+    }
+    updateColorLines();
+  }
+
+  function bind(){
+    // enable/disable custom color text box
+    $$('.step[data-step="2"] input[name="color"]').forEach(function(r){
+      r.addEventListener('change', onColorChange, false);
+    });
+    var txt = byId('customColorText');
+    if (txt){
+      txt.addEventListener('input', updateColorLines, false);
+      // If custom already selected on load, enable the input
+      var isCustom = !!document.querySelector('input[name="color"][value="custom"]:checked');
+      txt.disabled = !isCustom ? true : false;
+    }
+    // initial paint
+    updateColorLines();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
 })();
 </script>
 

@@ -6,6 +6,18 @@ window.DEFAULT_MODELS = window.DEFAULT_MODELS || [
   { id:"boat", title:"boat", description:"מודל סירה בסיסי 25×25 מ״מ",   image:"boat.jpeg", price:30 }
 ];
 
+
+// Load default models from external JSON so updating defaults is as simple as replacing one file
+async function preloadDefaultModels(){
+  try{
+    const res = await fetch("data/models.json", { cache: "no-store" });
+    if (res.ok){
+      const arr = await res.json();
+      if (Array.isArray(arr)) { window.DEFAULT_MODELS = arr; }
+    }
+  }catch(e){ /* keep built-in defaults if fetch fails */ }
+}
+
 let readySelection = false, readyPrice = null, readyModelTitle = null;
 
 /* --- Data helpers --- */
@@ -283,7 +295,8 @@ function bindBackToGallery(){
 }
 
 /* --- Init --- */
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", async function(){
+  await preloadDefaultModels();
   try{ renderModels(); }catch(e){}
   try{ enableGallerySelection(); }catch(e){}
   try{ bindPriceEvents(); }catch(e){}

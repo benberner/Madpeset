@@ -30,14 +30,20 @@
 <body>
   <div class="admin-wrap">
     <h1>אזור מנהל – מודלים קיימים</h1>
+    
     <div class="toolbar">
       <button id="addBtn" class="btn btn-add">הוסף מודל</button>
       <button id="saveBtn" class="btn btn-save">שמור שינויים</button>
       <a href="index.html" class="btn">↩︎ חזרה לאתר</a>
       <span class="flex-spacer"></span>
+      <input id="importFile" type="file" accept="application/json" style="display:none">
+      <button id="exportBtn" class="btn" title="הורדה לקובץ models.json">ייצא models.json</button>
+      <button id="importBtn" class="btn" title="טעינת models.json לקונפיגורציה">ייבא models.json</button>
       <button id="resetBtn" class="btn danger push-left" title="איפוס כל המודלים">אפס לברירת מחדל</button>
     </div>
-    <section id="heroAdmin" class="card-admin" style="margin-bottom:12px"><h2 style="margin-top:0">תמונת Hero של דף הבית</h2><img id="heroPreview" src="" alt="Hero Preview" style="width:100%;height:220px;object-fit:cover;border-radius:10px"><div class="row"><input id="heroFile" type="file" accept="image/*"><button id="heroSave" class="btn">שמור תמונת Hero</button><button id="heroReset" class="btn danger">אפס לברירת מחדל</button></div><div class="tiny muted" style="margin-top:6px">נשמר מקומית בדפדפן (localStorage).</div></section><div id="modelsAdmin" class="grid-admin"></div>
+
+    <section id="heroAdmin" class="card-admin" style="margin-bottom:12px"><h2 style="margin-top:0">תמונת Hero של דף הבית</h2><img id="heroPreview" src="" alt="Hero Preview" style="width:100%;height:220px;object-fit:cover;border-radius:10px"><div class="row"><input id="heroFile" type="file" accept="image/*"><button id="heroSave" class="btn">שמור תמונת Hero</button><button id="heroReset" class="btn danger">אפס לברירת מחדל</button></div><div class="tiny muted" style="margin-top:6px">נשמר מקומית בדפדפן (localStorage).</div></section>
+<section class="card-admin" style="margin-top:12px"><div class="tiny muted">כדי לעדכן את ברירת המחדל לכל המשתמשים, לחצו "ייצא models.json" והחליפו את הקובץ בתיקיה data בפרויקט לפני העלאה לגיטהאב. ניתן גם "ייבא models.json" כדי לטעון קובץ מוכן לתוך המנהל ולערוך אותו.</div></section><div id="modelsAdmin" class="grid-admin"></div>
   </div>
   <script>window.DEFAULT_MODELS = [
   {"id":"cat","title":"cat","description":"מחזיק מפתחות חתול גודל 15מ״מ על 15 מ״מ","image":"cat.jpeg","price":30},

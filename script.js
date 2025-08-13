@@ -1,4 +1,3 @@
-
 /* === v2.3.3 — stable gallery, correct pricing, back-to-gallery, visible price badges === */
 
 window.DEFAULT_MODELS = window.DEFAULT_MODELS || [
@@ -324,7 +323,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 
   const backBtn = document.getElementById("backBtn");
   const nextBtn = document.getElementById("nextBtn");
-  if (nextBtn) nextBtn.addEventListener("click", ()=>{ if (readySelection && currentStep===6){ setStep(MAX_STEP); return; } if (currentStep<MAX_STEP) setStep(currentStep+1); });
+  if (nextBtn) nextBtn.addEventListener("click", ()=>{ if (currentStep<MAX_STEP) setStep(currentStep+1); });
   if (backBtn) backBtn.addEventListener("click", ()=>{
     if (currentStep>1) setStep(currentStep-1);
     else showExisting();
@@ -341,3 +340,88 @@ document.addEventListener("DOMContentLoaded", async function(){
 
   updatePriceUI();
 });
+
+// ===== GitHub Save: push admin models to data/models.json =====
+function toBase64Utf8(str){ return btoa(unescape(encodeURIComponent(str))); }
+
+function getCurrentAdminModels(){
+  try{
+    const raw = localStorage.getItem("adminModels");
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  }catch(e){ return []; }
+}
+
+async function saveModelsToGitHub(models){
+  const repoEl = document.getElementById('ghRepo');
+  const branchEl = document.getElementById('ghBranch');
+  const pathEl = document.getElementById('ghPath');
+  const tokenEl = document.getElementById('ghToken');
+
+  const repo = (repoEl && repoEl.value || '').trim();
+  const branch = (branchEl && branchEl.value || 'main').trim();
+  const path = (pathEl && pathEl.value || 'data/models.json').trim();
+  const token = (tokenEl && tokenEl.value || '').trim();
+
+  if(!repo || !token){
+    showToast('נא למלא Repo ו‑Token', 'error');
+    return;
+  }
+
+  // Fetch existing to get sha (if exists)
+  let sha = undefined;
+  try{
+    const r = await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`, {
+      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `token ${token}` }
+    });
+    if(r.ok){
+      const j = await r.json();
+      sha = j.sha;
+    }
+  }catch(e){}
+
+  const content = toBase64Utf8(JSON.stringify(models, null, 2));
+  const body = { message: `chore: update ${path} via admin (${new Date().toISOString()})`, content, branch };
+  if(sha) body.sha = sha;
+
+  const put = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+    method: 'PUT',
+    headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `token ${token}` },
+    body: JSON.stringify(body)
+  });
+
+  if(!put.ok){
+    const err = await put.text();
+    console.error('GitHub save failed:', err);
+    showToast('השמירה ל‑GitHub נכשלה. בדוק הרשאות/branch/path/Repo/Token.', 'error');
+    return;
+  }
+  showToast('המודלים נשמרו בהצלחה ל‑GitHub ✅', 'success');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('ghSaveBtn');
+  if(btn){
+    btn.addEventListener('click', async () => {
+      const models = getCurrentAdminModels();
+      await saveModelsToGitHub(models);
+    });
+  }
+});
+
+
+// ===== Toast helpers =====
+function showToast(msg, type='success') {
+  try {
+    const el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.remove('error');
+    if (type === 'error') el.classList.add('error');
+    // show
+    requestAnimationFrame(() => {
+      el.classList.add('show');
+      setTimeout(() => { el.classList.remove('show'); }, 2200);
+    });
+  } catch (e) {}
+}

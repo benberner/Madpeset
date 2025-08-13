@@ -293,3 +293,14 @@ input[type="file"]::file-selector-button{font-family: 'Alef', Arial, Helvetica, 
   z-index: 2;
 }
 .price-badge.small{ min-width:40px; height:40px; font-size:13px }
+
+
+/* v5 delta: emphasize WhatsApp button on last step only */
+.step[data-step="8"] #submitBtn,
+.step[data-step="8"] .whatsapp-btn{
+  width: 100%;
+  font-size: 18px;
+  padding: 14px 18px;
+  box-shadow: 0 6px 18px rgba(37,211,102,0.35);
+  border: 2px solid #1fa855;
+}

@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 
   const backBtn = document.getElementById("backBtn");
   const nextBtn = document.getElementById("nextBtn");
-  if (nextBtn) nextBtn.addEventListener("click", ()=>{ if (currentStep<MAX_STEP) setStep(currentStep+1); });
+  if (nextBtn) nextBtn.addEventListener("click", ()=>{ if (readySelection && currentStep===6){ setStep(MAX_STEP); return; } if (currentStep<MAX_STEP) setStep(currentStep+1); });
   if (backBtn) backBtn.addEventListener("click", ()=>{
     if (currentStep>1) setStep(currentStep-1);
     else showExisting();

@@ -161,6 +161,8 @@ let currentStep = 1;
 const MAX_STEP = 8;
 
 function setStep(n){
+  /* existing-model skip */
+  if (readySelection && Number(n)===7 && Number(currentStep)===6) { n = MAX_STEP; }
   currentStep = Math.max(1, Math.min(MAX_STEP, Number(n)||1));
   document.querySelectorAll("#card .step").forEach(s=>{
     const k = Number(s.getAttribute("data-step"));
@@ -183,6 +185,14 @@ function setStep(n){
   if (nextBtn) nextBtn.style.display = (currentStep===MAX_STEP) ? "none" : "";
 
   updatePriceUI();
+  /* hide email on last for existing */
+  try {
+    if (readySelection && currentStep===MAX_STEP) {
+      var email = document.getElementById("email");
+      if (email) { email.removeAttribute("required"); var wrap = email.closest("div"); if (wrap) wrap.style.display="none"; }
+    }
+  } catch(e) {}
+
 }
 
 function getNumber(id, def=0){
@@ -323,7 +333,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 
   const backBtn = document.getElementById("backBtn");
   const nextBtn = document.getElementById("nextBtn");
-  if (nextBtn) nextBtn.addEventListener("click", ()=>{ if (currentStep<MAX_STEP) setStep(currentStep+1); });
+  if (nextBtn) nextBtn.addEventListener("click", ()=>{ if (readySelection && currentStep===6) { setStep(MAX_STEP); } else if (currentStep<MAX_STEP) { setStep(currentStep+1); } });
   if (backBtn) backBtn.addEventListener("click", ()=>{
     if (currentStep>1) setStep(currentStep-1);
     else showExisting();
@@ -425,3 +435,75 @@ function showToast(msg, type='success') {
     });
   } catch (e) {}
 }
+
+
+/* === existing-flow inline fix ===
+   Behavior: for "existing model" (readySelection===true)
+   - Step 6 is shown; clicking Next on step 6 jumps directly to LAST step (skip 7)
+   - On LAST step, email field is hidden and not required
+*/
+(function(){
+  var LAST_STEP = (typeof window.MAX_STEP === 'number' ? window.MAX_STEP : 8);
+
+  function hideEmailIfReady(){
+    try{
+      if (!window.readySelection) return;
+      var lastStepEl = document.querySelector('.step[data-step="'+LAST_STEP+'"]');
+      if (!lastStepEl || lastStepEl.style.display === 'none') return;
+      var email = document.getElementById('email');
+      if (email){
+        email.removeAttribute('required');
+        var wrap = email.closest('div');
+        if (wrap) wrap.style.display = 'none';
+      }
+    }catch(e){}
+  }
+
+  // Intercept Next button on step 6
+  document.addEventListener('DOMContentLoaded', function(){
+    var nextBtn = document.getElementById('nextBtn');
+    if (nextBtn && !nextBtn.__existingFixApplied){
+      nextBtn.__existingFixApplied = true;
+      nextBtn.addEventListener('click', function(){
+        try{
+          if (window.readySelection && window.currentStep === 6){
+            if (typeof window.setStep === 'function'){
+              window.setStep(LAST_STEP);
+              setTimeout(hideEmailIfReady, 0);
+              return;
+            }
+          }
+        }catch(e){}
+        setTimeout(hideEmailIfReady, 0);
+      }, true);
+    }
+    hideEmailIfReady();
+  });
+
+  // Wrap setStep so attempts to go from 6->7 in readySelection will skip to LAST_STEP
+  (function(){
+    var orig = window.setStep;
+    window.setStep = function(n){
+      try{
+        if (window.readySelection){
+          if (window.currentStep === 6 && (n === 7)) n = LAST_STEP;
+        }
+      }catch(e){}
+      if (typeof orig === 'function') return orig(n);
+      // Fallback show/hide if orig missing
+      try{
+        document.querySelectorAll('.step').forEach(function(el){
+          el.style.display = (String(el.getAttribute('data-step')) === String(n)) ? '' : 'none';
+        });
+        window.currentStep = n;
+      }catch(e){}
+    };
+  })();
+
+  // Keep hiding email if UI mutates
+  try{
+    var mo = new MutationObserver(function(){ hideEmailIfReady(); });
+    mo.observe(document.body, { subtree:true, childList:true, attributes:true });
+  }catch(e){}
+})();
+

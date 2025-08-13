@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="he" dir="rtl">
+
 <head>
+<!-- ALWAYS-8: embedded models fallback (moved to <head> so it's ready before scripts) -->
+<script>
+  window.EMBEDDED_MODELS = window.EMBEDDED_MODELS || [];
+</script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>מדפסת מרחוק</title>
@@ -13,6 +19,14 @@
   html, body { font-family: 'Alef', Arial, Helvetica, sans-serif; }
   #backToGallery.back-floating, #backToExistingFab.fab { left:auto; right:12px; }
 </style>
+
+
+<!-- ALWAYS-8: early bootstrap so UI has models even before script.js loads -->
+<script>
+  if (typeof window.getModels !== 'function') {
+    window.getModels = async function(){ return Array.isArray(window.EMBEDDED_MODELS) ? window.EMBEDDED_MODELS : []; };
+  }
+</script>
 
 </head>
 <body>
@@ -190,7 +204,7 @@
 
     <button id="backToGallery" class="back-floating" title="חזרה למודלים">↩︎ חזרה למודלים</button>
   
-<div class="tiny muted center mt">גרסה: v4.2.2</div>
+<div class="tiny muted center mt">גרסה: v5.4</div>
 </main>
 
   <script>window.DEFAULT_MODELS = [
@@ -439,6 +453,7 @@
   else bind();
 })();
 </script>
+
 
 </body>
 </html>

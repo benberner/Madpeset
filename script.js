@@ -84,6 +84,13 @@ function enableGallerySelection(){
     grid.querySelectorAll(".model-card.selected").forEach(c=> c.classList.remove("selected"));
     card.classList.add("selected");
 
+    // default color to colorful on existing model
+    try {
+      var c = document.querySelector('input[name="color"][value="colorful"]');
+      if (c){ c.checked = true; }
+      if (typeof updateColorLines === "function") { updateColorLines(); }
+    } catch(e){}
+
     // persist
     try{
       const sel = {
@@ -131,12 +138,7 @@ function showExisting(){
   if (nav)     nav.style.display     = "none";
   if (backFab) backFab.style.display = "none";
 
-  const be = document.getElementById("chooseExisting");
-  const bn = document.getElementById("createNew");
-  if (be) be.classList.add("active");
-  if (bn) bn.classList.remove("active");
-
-  readySelection = false; readyPrice = null; readyModelTitle = null;
+  window.scrollTo({ top: 0, behavior: "auto" });
 }
 
 function showNewWizard(){
@@ -507,3 +509,42 @@ function showToast(msg, type='success') {
   }catch(e){}
 })();
 
+
+
+// v5.7: show small preview when user selects an image in Step 1
+(function(){
+  function bindPreview(){
+    var input = document.getElementById('image');
+    var img   = document.getElementById('preview');
+    if (!input || !img) return;
+    input.addEventListener('change', function(){
+      var file = this.files && this.files[0];
+      if (!file) return;
+      try{
+        var url = URL.createObjectURL(file);
+        img.src = url;
+        img.style.display = 'block';
+      }catch(e){ /* ignore */ }
+    }, false);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindPreview);
+  else bindPreview();
+})();
+
+
+
+// v5.8: Direct skip to Step 1 when creating new model
+document.addEventListener('DOMContentLoaded', ()=>{
+  const btn = document.getElementById('createNew');
+  if(btn){
+    btn.addEventListener('click', ()=>{
+      try{
+        document.getElementById('galleryTop').style.display='none';
+      }catch(_){}
+      try{
+        showNewWizard();
+        setStep(1);
+      }catch(e){ console.error(e); }
+    });
+  }
+});

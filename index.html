@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=5.5" rel="stylesheet"/>
+<link href="style.css?v=5.8" rel="stylesheet"/>
 <style>
   html, body { font-family: 'Alef', Arial, Helvetica, sans-serif; }
   #backToGallery.back-floating, #backToExistingFab.fab { left:auto; right:12px; }
@@ -80,8 +80,8 @@
 <h2>שלב 2 - צבע</h2>
 <label class="radio"><input checked="" name="color" type="radio" value="colorful"/> צבעוני, מה שיוצא אני מרוצה</label>
 <label class="radio"><input name="color" type="radio" value="white"/> לבן</label>
+<label class="radio"><input name="color" type="radio" value="macaron"/> מקרון</label>
 <label class="radio disabled"><input disabled="" name="color" type="radio" value="black_unavailable"/> שחור, אין כרגע במלאי</label>
-<label class="radio disabled"><input disabled="" name="color" type="radio" value="macaron_soon"/> צבע מקרון, בקרוב</label>
 <div class="custom-color">
 <label class="radio"><input name="color" type="radio" value="custom"/> צבע לבחירתך, ננסה לספק</label>
 <input class="input" disabled="" id="customColorText" placeholder="כתבו את שם הצבע" type="text"/>
@@ -184,14 +184,14 @@
 <div class="tiny muted center mt">אזור ניהול: <a href="admin.html">העלאת מודלים ותיאורים</a></div>
 <button class="fab" id="backToExistingFab" style="display:none" title="חזרה למודלים קיימים">↩︎ חזרה למודלים</button>
 <button class="back-floating" id="backToGallery" title="חזרה למודלים">↩︎ חזרה למודלים</button>
-<div class="tiny muted center mt">גרסה: v5.4</div>
+        <div class="tiny muted center mt">גרסה: v5.8</div>
 </main>
 <script>window.DEFAULT_MODELS = [
   {"id":"cat","title":"cat","description":"מחזיק מפתחות חתול 15מ״מ על 15 מ״מ","image":"cat.jpeg","price":30},
   {"id":"boat","title":"boat","description":"מודל סירה בסיסי 25 מ״מ על 25 מ״מ","image":"boat.jpeg","price":30}
 ];</script>
 <script>(function(){try{var h=localStorage.getItem("adminHeroImage");if(h){var img=document.querySelector(".hero img"); if(img) img.src=h;}}catch(e){}})();</script>
-<script src="script.js?v=4.1.1"></script>
+<script src="script.js?v=5.8"></script>
 <!-- WhatsApp summary logic v1 -->
 <script>
 (function(){

@@ -297,21 +297,3 @@ input[type="file"]::file-selector-button{font-family: 'Alef', Arial, Helvetica, 
 .logo-3m-wrap{display:flex;justify-content:center;align-items:center;margin:8px 0;}
 .logo-3m{width:clamp(220px,40vw,520px);height:auto;display:block;}
 @media (max-width:640px){.logo-3m{width:clamp(200px,70vw,420px);}}
-
-
-/* === v5.5 Mobile vertical gallery override === */
-@media (max-width: 768px){
-  #galleryTop.models-grid{
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
-    overflow-x: visible !important;
-  }
-  #galleryTop .model-card{
-    width: 100% !important;
-    max-width: none !important;
-  }
-  #galleryTop .model-card img{
-    height: auto !important;
-  }
-}

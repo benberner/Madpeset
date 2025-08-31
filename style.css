@@ -370,3 +370,5 @@ input[type="file"]::file-selector-button{font-family: 'Alef', Arial, Helvetica, 
     background: transparent !important;
   }
 }
+
+.site-footer{padding:18px 12px;text-align:center;font-size:.9rem;opacity:.75}

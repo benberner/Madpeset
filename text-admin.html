@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>עריכת כל הטקסטים – v6.3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Alef',sans-serif;background:#fafafa;margin:0}
+    .wrap{max-width:1000px;margin:0 auto;padding:20px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin-bottom:12px}
+    input,textarea{width:100%;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .btn{border:none;border-radius:12px;padding:10px 12px;cursor:pointer}
+    .primary{background:#bbf7d0}
+    .alt{background:#e9d5ff}
+    .muted{opacity:.75;font-size:.9rem}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>עריכת טקסטים לאתר – v6.3</h1>
+  <div class="toolbar">
+    <input id="importFile" type="file" accept="application/json" style="display:none">
+    <button id="loadBtn" class="btn">טען data/texts.json</button>
+    <button id="importBtn" class="btn">ייבוא קובץ</button>
+    <button id="exportBtn" class="btn primary">הורד texts.json</button>
+  </div>
+
+  <section class="card">
+    <h2>גרסה</h2>
+    <input id="version">
+  </section>
+
+  <section class="card">
+    <h2>גופנים וגודל</h2>
+    <div class="grid">
+      <div><label>Font family</label><input id="fontFamily"></div>
+      <div><label>Base px</label><input id="fontBase" type="number" min="10" step="1"></div>
+      <div><label>H1 px</label><input id="fontH1" type="number" min="10" step="1"></div>
+      <div><label>Paragraph px</label><input id="fontP" type="number" min="10" step="1"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Hero</h2>
+    <div class="grid">
+      <div><label>כותרת</label><input id="heroTitleInput"></div>
+      <div><label>תת כותרת</label><input id="heroSubInput"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Header</h2>
+    <input id="headerLineInput">
+  </section>
+
+  <section class="card">
+    <h2>כפתורי מצב</h2>
+    <div class="grid">
+      <div><label>בחירת מודל קיים</label><input id="existingBtnInput"></div>
+      <div><label>יצירת מודל חדש</label><input id="newBtnInput"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>כותרות שלבים</h2>
+    <div class="grid">
+      <div><label>שלב 1</label><input id="s1"></div>
+      <div><label>שלב 2</label><input id="s2"></div>
+      <div><label>שלב 3</label><input id="s3"></div>
+      <div><label>שלב 4</label><input id="s4"></div>
+      <div><label>שלב 5</label><input id="s5"></div>
+      <div><label>שלב 6</label><input id="s6"></div>
+      <div><label>שלב 7</label><input id="s7"></div>
+      <div><label>שלב 8</label><input id="s8"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>שלב 1</h2>
+    <div class="grid">
+      <div><label>תיאור</label><input id="step1Label"></div>
+      <div><label>Placeholder</label><input id="step1PH"></div>
+      <div><label>העלאת תמונה</label><input id="step1Upload"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>שלב 2</h2>
+    <div class="grid">
+      <div><label>צבעוני</label><input id="s2colorful"></div>
+      <div><label>לבן</label><input id="s2white"></div>
+      <div><label>שחור (אין)</label><input id="s2black"></div>
+      <div><label>מקרון (בקרוב)</label><input id="s2macaron"></div>
+      <div><label>צבע לבחירתך</label><input id="s2custom"></div>
+      <div><label>Placeholder צבע</label><input id="s2customPH"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>שלב 3</h2>
+    <div class="grid">
+      <div><label>רוחב</label><input id="s3width"></div>
+      <div><label>גובה</label><input id="s3height"></div>
+      <div><label>הערת מחיר</label><input id="s3priceNote"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>שלב 4 – קשיחות</h2>
+    <div class="grid">
+      <div><label>קלה</label><input id="s4light"></div>
+      <div><label>בינונית</label><input id="s4mid"></div>
+      <div><label>חזקה</label><input id="s4strong"></div>
+      <div><label>הערה</label><input id="s4note"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>שלב 5 – רזולוציה</h2>
+    <div class="grid">
+      <div><label>נמוכה</label><input id="s5low"></div>
+      <div><label>בינונית</label><input id="s5medium"></div>
+      <div><label>גבוהה</label><input id="s5high"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>שלב 6 – תמחור</h2>
+    <div class="grid">
+      <div><label>חומר</label><input id="s6material"></div>
+      <div><label>גודל</label><input id="s6size"></div>
+      <div><label>רזולוציה</label><input id="s6resolution"></div>
+      <div><label>קשיחות</label><input id="s6hardness"></div>
+      <div><label>כמות</label><input id="s6quantity"></div>
+      <div><label>סה"כ</label><input id="s6total"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>שלב 7 – הערות</h2>
+    <div class="grid">
+      <div><label>כותרת</label><input id="s7label"></div>
+      <div><label>Placeholder</label><input id="s7ph"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>שלב 8 – פרטי קשר</h2>
+    <div class="grid">
+      <div><label>שם מלא</label><input id="s8name"></div>
+      <div><label>טלפון</label><input id="s8phone"></div>
+      <div><label>מייל</label><input id="s8email"></div>
+      <div><label>כתובת</label><input id="s8address"></div>
+      <div><label>עיר</label><input id="s8city"></div>
+      <div><label>טקסט תודה</label><input id="s8thank"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>הודעות ו-CTA</h2>
+    <div class="grid">
+      <div><label>הודעת איסוף עצמי</label><input id="noticePickup"></div>
+      <div><label>הודעת תשלום</label><input id="noticePayment"></div>
+      <div><label>CTA וואטסאפ</label><input id="ctaWhatsApp"></div>
+    </div>
+    <p class="muted">אחרי עריכה, הורידו את texts.json והחליפו אותו בתיקיית data באתר.</p>
+  </section>
+
+</div>
+<script src="text-admin.js"></script>
+</body>
+</html>

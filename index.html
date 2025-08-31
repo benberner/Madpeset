@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=5.9.2?v=5.9.2" rel="stylesheet"/>
+<link href="style.css?v=6.3" rel="stylesheet"/>
 <style>
   html, body { font-family: 'Alef', Arial, Helvetica, sans-serif; }
   #backToGallery.back-floating, #backToExistingFab.fab { left:auto; right:12px; }
@@ -38,8 +38,8 @@
 <img alt="תמונת הירו" src="hero.jpg"/>
 <div class="overlay">
 
-<h1>ברוכים הבאים למדפסת מרחוק</h1>
-<p>הדפסת תלת מימד לכל מטרה</p>
+<h1 id="heroTitle">ברוכים הבאים למדפסת מרחוק</h1>
+<p id="heroSubtitle">הדפסת תלת מימד לכל מטרה</p>
 </div>
 </section>
 <section class="mode-chooser" id="modeChooserTop">
@@ -48,7 +48,7 @@
 </section>
 <section class="models-grid" id="galleryTop"></section>
 <header class="site-header">
-<p>רוצים להדפיס בתלת מימד ואין לכם מדפסת, אני מדפיס לכם בשניה ולא יעלה יותר מ 80 ש"ח</p>
+<p><span id="siteHeaderLine">רוצים להדפיס בתלת מימד ואין לכם מדפסת, אני מדפיס לכם בשניה ולא יעלה יותר מ 80 ש"ח</span></p>
 </header>
 <ol class="steps" id="stepsPills" style="display:none">
 <li data-step="1">שלב 1 - תיאור המוצר</li>
@@ -184,14 +184,13 @@
 <div class="tiny muted center mt">אזור ניהול: <a href="admin.html">העלאת מודלים ותיאורים</a></div>
 <button class="fab" id="backToExistingFab" style="display:none" title="חזרה למודלים קיימים">↩︎ חזרה למודלים</button>
 <button class="back-floating" id="backToGallery" title="חזרה למודלים">↩︎ חזרה למודלים</button>
-<div class="tiny muted center mt">גרסה: v5.4</div>
 </main>
 <script>window.DEFAULT_MODELS = [
   {"id":"cat","title":"cat","description":"מחזיק מפתחות חתול 15מ״מ על 15 מ״מ","image":"cat.jpeg","price":30},
   {"id":"boat","title":"boat","description":"מודל סירה בסיסי 25 מ״מ על 25 מ״מ","image":"boat.jpeg","price":30}
 ];</script>
 <script>(function(){try{var h=localStorage.getItem("adminHeroImage");if(h){var img=document.querySelector(".hero img"); if(img) img.src=h;}}catch(e){}})();</script>
-<script src="script.js?v=5.9.2?v=4.1.1"></script>
+<script src="script.js?v=6.3"></script>
 <!-- WhatsApp summary logic v1 -->
 <script>
 (function(){
@@ -429,8 +428,9 @@
 </script>
 
 <footer style="text-align:center; font-family: Alef, sans-serif; color:#6b7280; padding: 12px 0;">
-  <small>v5.9.2</small>
 </footer>
 
+
+<footer class="site-footer"><div id="siteVersion"></div></footer>
 </body>
 </html>

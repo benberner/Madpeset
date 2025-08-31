@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>סידור סדר המודלים</title>
+  <style>
+    body{font-family:Alef,Arial,Helvetica,sans-serif;background:#fafafa;margin:0}
+    .wrap{max-width:1000px;margin:0 auto;padding:20px}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .btn{border:none;border-radius:12px;padding:10px 12px;cursor:pointer}
+    .primary{background:#bbf7d0}
+    .alt{background:#e9d5ff}
+    .list{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:8px}
+    .item{display:flex;align-items:center;gap:12px;padding:8px;border:1px solid #e5e7eb;border-radius:12px;margin:8px 0;background:#fff}
+    .thumb{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid #ddd;background:#f0f0f0}
+    .drag{cursor:grab;font-size:18px;opacity:.6}
+    .title{flex:1}
+    .ghost{opacity:.4}
+    .hint{opacity:.75;font-size:.9rem}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>סידור סדר המודלים</h1>
+  <div class="toolbar">
+    <input id="importFile" type="file" accept="application/json" style="display:none">
+    <button id="loadBtn" class="btn">טען data/models.json</button>
+    <button id="importBtn" class="btn">ייבוא קובץ</button>
+    <button id="exportBtn" class="btn primary">הורד models.json</button>
+    <a href="admin.html" class="btn alt">↩︎ לאזור הניהול</a>
+  </div>
+  <p class="hint">גרור את הפריטים למעלה/למטה כדי לשנות סדר. לאחר מכן לחץ "הורד models.json" והחלף את הקובץ בתיקיית data בגיטהאב.</p>
+  <div id="list" class="list"></div>
+</div>
+<script src="models-order.js"></script>
+</body>
+</html>

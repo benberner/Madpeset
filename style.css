@@ -371,4 +371,6 @@ input[type="file"]::file-selector-button{font-family: 'Alef', Arial, Helvetica, 
   }
 }
 
-.site-footer{padding:18px 12px;text-align:center;font-size:.9rem;opacity:.75}
+
+/* v6.3 fix: always show version footer on all viewports */
+.site-footer{display:block;padding:18px 12px;text-align:center;font-size:.9rem;opacity:.75;border-top:1px solid #e5e7eb}

@@ -93,7 +93,7 @@ function enableGallerySelection(){
         image: card.dataset.image || (card.querySelector('img')?.src || ''),
         price: (card.dataset.price!=='' ? Number(card.dataset.price) : null)
       };
-      localStorage.setItem("selectedModel", JSON.stringify(sel)); syncSelectedModelFromStorage();
+      localStorage.setItem("selectedModel", JSON.stringify(sel));
     }catch(e){}
 
     // price
@@ -509,12 +509,81 @@ function showToast(msg, type='success') {
 })();
 
 
-// v6.5 preview card
+
+// v6.6 generic texts binder + footer version
+function _getByPath(obj, path){
+  try{ return path.split('.').reduce((o,k)=> (o && k in o) ? o[k] : undefined, obj); }catch(e){ return undefined; }
+}
+async function applyTextsGeneric(){
+  try{
+    const res = await fetch('data/texts.json?v=6.6', {cache:'no-store'});
+    if (!res.ok) return;
+    const t = await res.json();
+
+    // Footer version
+    const v = document.getElementById('siteVersion');
+    if (v && t.version) v.textContent = t.version;
+
+    // data-i18n mapping
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      const attr = el.getAttribute('data-i18n-attr') || 'textContent';
+      const val = _getByPath(t, key);
+      if (val == null) return;
+      if (attr === 'placeholder') el.setAttribute('placeholder', String(val));
+      else if (attr === 'value') el.setAttribute('value', String(val));
+      else el.textContent = String(val);
+    });
+
+    // Fallbacks: step titles
+    if (t.steps){
+      document.querySelectorAll('ol.steps li[data-step]').forEach(li=>{
+        const k = li.getAttribute('data-step'); if (k && t.steps[k]) li.textContent = t.steps[k];
+      });
+      document.querySelectorAll('.step[data-step] > h2').forEach(h2=>{
+        const k = h2.parentElement?.getAttribute('data-step'); if (k && t.steps[k]) h2.textContent = t.steps[k];
+      });
+    }
+
+    // Fallbacks: step 2 color labels
+    const setAfterInputLabel = (root, selector, text) => {
+      const inp = root.querySelector(selector); if (!inp) return;
+      const lab = inp.closest('label') || inp.parentElement; if (!lab) return;
+      const rm=[]; lab.childNodes.forEach(n=>{ if(n.nodeType===3) rm.push(n); }); rm.forEach(n=> lab.removeChild(n));
+      lab.appendChild(document.createTextNode(' '+text));
+    };
+    const step2 = document.querySelector('.step[data-step="2"]');
+    if (step2 && t.step2){
+      if (t.step2.opt_colorful) setAfterInputLabel(step2, 'input[value="colorful"]', t.step2.opt_colorful);
+      if (t.step2.opt_white) setAfterInputLabel(step2, 'input[value="white"]', t.step2.opt_white);
+      const mac = t.step2.opt_macaron || t.step2.opt_macaron_soon;
+      if (mac) setAfterInputLabel(step2, 'input[value="macaron"]', mac);
+      if (t.step2.opt_custom) setAfterInputLabel(step2, 'input[value="custom"]', t.step2.opt_custom);
+    }
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded', ()=>{ try{ applyTextsGeneric(); }catch(e){} });
+
+
+// v6.6 model image resolver (supports base64 or URL)
+function getModelImageSrc(m){
+  if (!m) return '';
+  if (m.imageUrl) return m.imageUrl;
+  if (m.image){
+    const s = String(m.image);
+    if (s.startsWith('data:')) return s;
+    if (/^[A-Za-z0-9+/=\s]+$/.test(s.slice(0,120))) return 'data:image/jpeg;base64,'+s;
+  }
+  return '';
+}
+
+
+// v6.6 selected model preview
 function renderSelectedModelCard(model){
   const box = document.getElementById('selectedModelPreview');
   if (!box) return;
   if (!model){ box.style.display='none'; box.innerHTML=''; return; }
-  const imgSrc = model.imageUrl || model.image || '';
+  const imgSrc = getModelImageSrc(model);
   const title = model.title || model.name || 'מודל';
   const desc  = model.description || '';
   box.innerHTML = `
@@ -531,18 +600,18 @@ function renderSelectedModelCard(model){
 function syncSelectedModelFromStorage(){
   try{
     const raw = localStorage.getItem('selectedModel');
-    if (!raw) { renderSelectedModelCard(null); return; }
+    if (!raw){ renderSelectedModelCard(null); return; }
     const m = JSON.parse(raw);
     renderSelectedModelCard(m && typeof m==='object' ? m : null);
   }catch(e){ renderSelectedModelCard(null); }
 }
-document.addEventListener('DOMContentLoaded', ()=>{ syncSelectedModelFromStorage(); });
+
+// Update on load, and when storage changes across tabs
+document.addEventListener('DOMContentLoaded', ()=>{ try{ syncSelectedModelFromStorage(); }catch(e){} });
 window.addEventListener('storage', (e)=>{ if (e.key==='selectedModel') syncSelectedModelFromStorage(); });
 
-// footer version from texts.json v6.5
-(function(){
-  fetch('data/texts.json?v=6.5',{cache:'no-store'})
-    .then(r=>r.ok?r.json():null)
-    .then(t=>{ const el=document.getElementById('siteVersion'); if (el && t && t.version) el.textContent=t.version; })
-    .catch(()=>{});
-})();
+// Light polling fallback: after any click inside the models area, poll for a short time
+document.addEventListener('click', (e)=>{
+  if (!e.target.closest('.models, .gallery, .model-card, [data-model-index], [data-model-id]')) return;
+  let n=0; const id=setInterval(()=>{ syncSelectedModelFromStorage(); if(++n>10) clearInterval(id); }, 300);
+});

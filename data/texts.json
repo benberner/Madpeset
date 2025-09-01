@@ -1,5 +1,5 @@
 {
-  "version": "גרסה 6.601",
+  "version": "גרסה 7.0",
   "font": {
     "family": "Alef, Arial, Helvetica, sans-serif",
     "base_px": 16,
@@ -36,9 +36,9 @@
     "opt_colorful": "צבעוני, מה שיוצא אני מרוצה",
     "opt_white": "לבן",
     "opt_black_unavailable": "שחור, אין כרגע במלאי",
+    "opt_macaron_soon": "צבע מקרוּן - חדש!",
     "opt_custom": "צבע לבחירתך, ננסה לספק",
-    "custom_placeholder": "כתבו את שם הצבע",
-    "opt_macaron": "צבע מקרון - חדש!"
+    "custom_placeholder": "כתבו את שם הצבע"
   },
   "step3": {
     "width_label": "רוחב במ\"מ",

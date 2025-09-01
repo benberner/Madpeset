@@ -782,3 +782,32 @@ document.addEventListener('click', (e)=>{
   if (!hit) return;
   let n=0; const id=setInterval(()=>{ syncSelectedModelFromStorage(); if(++n>10) clearInterval(id); }, 250);
 });
+
+
+// Central mode setter: 'existing' | 'new'
+function setOrderMode(mode){
+  if (mode!=='existing' && mode!=='new') return;
+  localStorage.setItem('orderMode', mode);
+  document.documentElement.setAttribute('data-order-mode', mode);
+  try{
+    const exBtn = document.querySelector('#chooseExisting');
+    const newBtn = document.querySelector('#createNew');
+    if (exBtn) exBtn.classList.toggle('active', mode==='existing');
+    if (newBtn) newBtn.classList.toggle('active', mode==='new');
+  }catch(e){}
+  if (mode==='new'){
+    // clear any previously selected existing model
+    localStorage.removeItem('selectedModel');
+    document.querySelectorAll('.model-card.selected,[data-model-id].selected').forEach(el=>el.classList.remove('selected'));
+    // hide model preview if present
+    const el = document.querySelector('#selectedModelImg, #modelSelectedImg, [data-selected-model-img]');
+    if (el){ el.classList.add('hidden'); el.removeAttribute('src'); el.removeAttribute('alt'); }
+  }
+}
+
+document.addEventListener('click', (e)=>{
+  const ex = e.target.closest && e.target.closest('#chooseExisting');
+  const nw = e.target.closest && e.target.closest('#createNew');
+  if (ex){ setOrderMode('existing'); setTimeout(updateSelectedModelPreview, 0); }
+  if (nw){ setOrderMode('new'); /* preview hidden by setOrderMode */ }
+});

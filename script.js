@@ -679,3 +679,106 @@ function placeMacaronBeforeBlack(){
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{ try{ loadTexts(); }catch(e){} placeMacaronBeforeBlack(); });
+
+
+// v6.7.2: texts binder with hard no-cache
+function _getByPath(obj, path){
+  try{ return path.split('.').reduce((o,k)=> (o && k in o) ? o[k] : undefined, obj); }catch(e){ return undefined; }
+}
+async function applyTextsGeneric(){
+  try{
+    const url = new URL('data/texts.json', document.baseURI).href + '?ts=' + Date.now();
+    const res = await fetch(url, {cache:'no-store'});
+    if (!res.ok) return;
+    const t = await res.json();
+
+    const v = document.getElementById('siteVersion');
+    if (v && t.version) v.textContent = t.version;
+
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      const attr = el.getAttribute('data-i18n-attr') || 'textContent';
+      const val = _getByPath(t, key);
+      if (val == null) return;
+      if (attr === 'placeholder') el.setAttribute('placeholder', String(val));
+      else if (attr === 'value') el.setAttribute('value', String(val));
+      else el.textContent = String(val);
+    });
+
+    if (t.steps){
+      document.querySelectorAll('ol.steps li[data-step]').forEach(li=>{
+        const k = li.getAttribute('data-step'); if (k && t.steps[k]) li.textContent = t.steps[k];
+      });
+      document.querySelectorAll('.step[data-step] > h2').forEach(h2=>{
+        const k = h2.parentElement?.getAttribute('data-step'); if (k && t.steps[k]) h2.textContent = t.steps[k];
+      });
+    }
+
+    const setAfterInputLabel = (root, selector, text) => {
+      const inp = root.querySelector(selector); if (!inp) return;
+      const lab = inp.closest('label') || inp.parentElement; if (!lab) return;
+      const rm=[]; lab.childNodes.forEach(n=>{ if(n.nodeType===3) rm.push(n); }); rm.forEach(n=> lab.removeChild(n));
+      lab.appendChild(document.createTextNode(' '+text));
+    };
+    const step2 = document.querySelector('.step[data-step="2"]');
+    if (step2){
+      const mac = (t.step2 && (t.step2.opt_macaron || t.step2.opt_macaron_soon));
+      if (t.step2?.opt_colorful) setAfterInputLabel(step2, 'input[value="colorful"]', t.step2.opt_colorful);
+      if (t.step2?.opt_white) setAfterInputLabel(step2, 'input[value="white"]', t.step2.opt_white);
+      if (mac) setAfterInputLabel(step2, 'input[value="macaron"]', mac);
+      if (t.step2?.opt_custom) setAfterInputLabel(step2, 'input[value="custom"]', t.step2.opt_custom);
+    }
+  }catch(e){ console.warn('applyTextsGeneric failed', e); }
+}
+document.addEventListener('DOMContentLoaded', ()=>{ try{ applyTextsGeneric(); }catch(e){} });
+
+
+// v6.7.2: model image resolver (URL or base64)
+function getModelImageSrc(m){
+  if (!m) return '';
+  if (m.imageUrl) return m.imageUrl;
+  if (m.image){
+    const s = String(m.image);
+    if (s.startsWith('data:')) return s;
+    if (/^[A-Za-z0-9+/=\s]+$/.test(s.slice(0,120))) return 'data:image/jpeg;base64,'+s;
+  }
+  return '';
+}
+
+
+// v6.7.2: selected model preview above Step 6
+function renderSelectedModelCard(model){
+  const box = document.getElementById('selectedModelPreview');
+  if (!box) return;
+  if (!model){ box.style.display='none'; box.innerHTML=''; return; }
+  const imgSrc = getModelImageSrc(model);
+  const title = model.title || model.name || 'מודל';
+  const desc  = model.description || '';
+  box.innerHTML = `
+    <div class="preview-wrap" style="display:flex;gap:12px;align-items:flex-start">
+      ${imgSrc ? `<img src="${imgSrc}" alt="" style="width:96px;height:96px;object-fit:cover;border-radius:10px;border:1px solid #e5e7eb">` : ''}
+      <div>
+        <div style="font-weight:700">${title}</div>
+        ${desc ? `<div style="opacity:.8;font-size:.95rem">${desc}</div>` : ''}
+      </div>
+    </div>`;
+  box.style.display='block';
+}
+
+function syncSelectedModelFromStorage(){
+  try{
+    const raw = localStorage.getItem('selectedModel');
+    if (!raw){ renderSelectedModelCard(null); return; }
+    const m = JSON.parse(raw);
+    renderSelectedModelCard(m && typeof m==='object' ? m : null);
+  }catch(e){ renderSelectedModelCard(null); }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{ try{ syncSelectedModelFromStorage(); }catch(e){} });
+window.addEventListener('storage', (e)=>{ if (e.key==='selectedModel') syncSelectedModelFromStorage(); });
+
+document.addEventListener('click', (e)=>{
+  const hit = e.target.closest('.model-card, [data-model-index], [data-model-id], #galleryTop, .models, .gallery');
+  if (!hit) return;
+  let n=0; const id=setInterval(()=>{ syncSelectedModelFromStorage(); if(++n>10) clearInterval(id); }, 250);
+});

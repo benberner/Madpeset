@@ -374,3 +374,28 @@ input[type="file"]::file-selector-button{font-family: 'Alef', Arial, Helvetica, 
 .site-footer{padding:18px 12px;text-align:center;font-size:.9rem;opacity:.75;border-top:1px solid #e5e7eb}
 
 .model-preview{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:12px}
+
+
+/* === Theme variables for main mode buttons === */
+:root {
+  --btn-mode-existing: #bbf7d0;
+  --btn-mode-existing-text: #064e3b;
+  --btn-mode-new: #bae6fd;
+  --btn-mode-new-text: #1e3a8a;
+}
+
+#chooseExisting.mode-option {
+  background-color: var(--btn-mode-existing) !important;
+  color: var(--btn-mode-existing-text) !important;
+}
+#chooseExisting.mode-option.active {
+  border: 2px solid var(--btn-mode-existing-text) !important;
+}
+
+#createNew.mode-option {
+  background-color: var(--btn-mode-new) !important;
+  color: var(--btn-mode-new-text) !important;
+}
+#createNew.mode-option.active {
+  border: 2px solid var(--btn-mode-new-text) !important;
+}

@@ -1,5 +1,5 @@
 {
-  "version": "גרסה 7.0",
+  "version": "גרסה 6.601",
   "font": {
     "family": "Alef, Arial, Helvetica, sans-serif",
     "base_px": 16,
@@ -36,7 +36,7 @@
     "opt_colorful": "צבעוני, מה שיוצא אני מרוצה",
     "opt_white": "לבן",
     "opt_black_unavailable": "שחור, אין כרגע במלאי",
-    "opt_macaron_soon": "צבע מקרוּן - חדש!",
+    "opt_macaron_soon": "צבע מקרון - חדש!",
     "opt_custom": "צבע לבחירתך, ננסה לספק",
     "custom_placeholder": "כתבו את שם הצבע"
   },
@@ -82,5 +82,19 @@
   },
   "cta": {
     "whatsapp": "שליחת הזמנה"
+  },
+  "theme": {
+    "primary": "#25d366",
+    "primaryHover": "#1ebe5d",
+    "primaryText": "#ffffff",
+    "modeExisting": "#bbf7d0",
+    "modeExistingText": "#064e3b",
+    "modeNew": "#bae6fd",
+    "modeNewText": "#1e3a8a",
+    "priceBg": "#111827",
+    "priceText": "#ffffff",
+    "priceBorder": "#111827",
+    "stepAccent": "#22c55e",
+    "stepAccentText": "#0f172a"
   }
 }

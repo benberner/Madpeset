@@ -510,108 +510,172 @@ function showToast(msg, type='success') {
 
 
 
-// v6.6 generic texts binder + footer version
-function _getByPath(obj, path){
-  try{ return path.split('.').reduce((o,k)=> (o && k in o) ? o[k] : undefined, obj); }catch(e){ return undefined; }
-}
-async function applyTextsGeneric(){
+// === v6.35 texts.json loader ===
+async function loadTexts(){
   try{
-    const res = await fetch('data/texts.json?v=6.6', {cache:'no-store'});
+    const res = await fetch(new URL('data/texts.json', document.baseURI).href + '?ts=' + Date.now(), {cache:'no-store'});
     if (!res.ok) return;
     const t = await res.json();
 
-    // Footer version
-    const v = document.getElementById('siteVersion');
-    if (v && t.version) v.textContent = t.version;
-
-    // data-i18n mapping
-    document.querySelectorAll('[data-i18n]').forEach(el=>{
-      const key = el.getAttribute('data-i18n');
-      const attr = el.getAttribute('data-i18n-attr') || 'textContent';
-      const val = _getByPath(t, key);
-      if (val == null) return;
-      if (attr === 'placeholder') el.setAttribute('placeholder', String(val));
-      else if (attr === 'value') el.setAttribute('value', String(val));
-      else el.textContent = String(val);
-    });
-
-    // Fallbacks: step titles
+    if (t.version){
+      const v = document.getElementById('siteVersion');
+      if (v) v.textContent = t.version;
+    }
+    try{
+      const r = document.documentElement;
+      if (t.font){
+        if (t.font.family)   r.style.setProperty('--font-family', t.font.family);
+        if (t.font.base_px)  r.style.setProperty('--font-size-base', (t.font.base_px|0)+'px');
+        if (t.font.h1_px)    r.style.setProperty('--font-size-h1', (t.font.h1_px|0)+'px');
+        if (t.font.p_px)     r.style.setProperty('--font-size-p', (t.font.p_px|0)+'px');
+      }
+    }catch(e){}
+    if (t.hero){
+      const h1 = document.getElementById('heroTitle');
+      const p  = document.getElementById('heroSubtitle');
+      if (h1 && t.hero.title) h1.textContent = t.hero.title;
+      if (p && t.hero.subtitle) p.textContent = t.hero.subtitle;
+    }
+    if (t.header && t.header.line){
+      const el = document.getElementById('siteHeaderLine'); if (el) el.textContent = t.header.line;
+    }
+    if (t.modeChooser){
+      const be = document.getElementById('chooseExisting');
+      const bn = document.getElementById('createNew');
+      if (be && t.modeChooser.existing) be.textContent = t.modeChooser.existing;
+      if (bn && t.modeChooser.new)      bn.textContent = t.modeChooser.new;
+    }
     if (t.steps){
       document.querySelectorAll('ol.steps li[data-step]').forEach(li=>{
-        const k = li.getAttribute('data-step'); if (k && t.steps[k]) li.textContent = t.steps[k];
+        const k = li.getAttribute('data-step');
+        if (k && t.steps[k]) li.textContent = t.steps[k];
       });
       document.querySelectorAll('.step[data-step] > h2').forEach(h2=>{
-        const k = h2.parentElement?.getAttribute('data-step'); if (k && t.steps[k]) h2.textContent = t.steps[k];
+        const k = h2.parentElement?.getAttribute('data-step');
+        if (k && t.steps[k]) h2.textContent = t.steps[k];
       });
     }
-
-    // Fallbacks: step 2 color labels
     const setAfterInputLabel = (root, selector, text) => {
-      const inp = root.querySelector(selector); if (!inp) return;
-      const lab = inp.closest('label') || inp.parentElement; if (!lab) return;
-      const rm=[]; lab.childNodes.forEach(n=>{ if(n.nodeType===3) rm.push(n); }); rm.forEach(n=> lab.removeChild(n));
+      const inp = root.querySelector(selector);
+      if (!inp) return;
+      const lab = inp.closest('label') || inp.parentElement;
+      if (!lab) return;
+      const toRemove=[]; lab.childNodes.forEach(n=>{ if(n.nodeType===3) toRemove.push(n); });
+      toRemove.forEach(n=> lab.removeChild(n));
       lab.appendChild(document.createTextNode(' '+text));
     };
-    const step2 = document.querySelector('.step[data-step="2"]');
-    if (step2 && t.step2){
-      if (t.step2.opt_colorful) setAfterInputLabel(step2, 'input[value="colorful"]', t.step2.opt_colorful);
-      if (t.step2.opt_white) setAfterInputLabel(step2, 'input[value="white"]', t.step2.opt_white);
-      const mac = t.step2.opt_macaron || t.step2.opt_macaron_soon;
-      if (mac) setAfterInputLabel(step2, 'input[value="macaron"]', mac);
-      if (t.step2.opt_custom) setAfterInputLabel(step2, 'input[value="custom"]', t.step2.opt_custom);
+    if (t.step1){
+      const root = document.querySelector('.step[data-step="1"]');
+      if (root){
+        const lab = root.querySelector('label');
+        if (lab && t.step1.desc_label) lab.textContent = t.step1.desc_label;
+        const ta = document.getElementById('desc');
+        if (ta && t.step1.desc_placeholder) ta.placeholder = t.step1.desc_placeholder;
+        const upl = root.querySelector('.mt label');
+        if (upl && t.step1.upload_label) upl.textContent = t.step1.upload_label;
+      }
+    }
+    if (t.step2){
+      const root = document.querySelector('.step[data-step="2"]');
+      if (root){
+        if (t.step2.opt_colorful) setAfterInputLabel(root, 'input[value="colorful"]', t.step2.opt_colorful);
+        if (t.step2.opt_white) setAfterInputLabel(root, 'input[value="white"]', t.step2.opt_white);
+        const macaronLabel = (t.step2.opt_macaron || t.step2.opt_macaron_soon || 'צבע מקרון - חדש!');
+        setAfterInputLabel(root, 'input[value="macaron"]', macaronLabel);
+        if (t.step2.opt_custom) setAfterInputLabel(root, 'input[value="custom"]', t.step2.opt_custom);
+        const ctext = document.getElementById('customColorText');
+        if (ctext && t.step2.custom_placeholder) ctext.placeholder = t.step2.custom_placeholder;
+      }
+    }
+    if (t.step3){
+      const root = document.querySelector('.step[data-step="3"]');
+      if (root){
+        const labs = root.querySelectorAll('label');
+        if (labs[0] && t.step3.width_label)  labs[0].textContent = t.step3.width_label;
+        if (labs[1] && t.step3.height_label) labs[1].textContent = t.step3.height_label;
+        const note = root.querySelector('.note-red');
+        if (note && t.step3.price_note) note.textContent = t.step3.price_note;
+      }
+    }
+    if (t.step4){
+      const root = document.querySelector('.step[data-step="4"]');
+      if (root){
+        if (t.step4.opt_light) setAfterInputLabel(root, 'input[value="light"]', t.step4.opt_light);
+        if (t.step4.opt_mid) setAfterInputLabel(root, 'input[value="mid"]', t.step4.opt_mid);
+        if (t.step4.opt_strong) setAfterInputLabel(root, 'input[value="strong"]', t.step4.opt_strong);
+        const note = root.querySelector('.note-red');
+        if (note && t.step4.note) note.textContent = t.step4.note;
+      }
+    }
+    if (t.step5){
+      const root = document.querySelector('.step[data-step="5"]');
+      if (root){
+        if (t.step5.low) setAfterInputLabel(root, 'input[value="low"]', t.step5.low);
+        if (t.step5.medium) setAfterInputLabel(root, 'input[value="medium"]', t.step5.medium);
+        if (t.step5.high) setAfterInputLabel(root, 'input[value="high"]', t.step5.high);
+      }
+    }
+    if (t.step6){
+      const root = document.querySelector('.step[data-step="6"]');
+      if (root){
+        const rows = root.querySelectorAll('.price-row .label');
+        if (rows.length){
+          if (t.step6.material && rows[0]) rows[0].textContent = t.step6.material;
+          if (t.step6.size && rows[1]) rows[1].textContent = t.step6.size;
+          if (t.step6.resolution && rows[2]) rows[2].textContent = t.step6.resolution;
+          if (t.step6.hardness && rows[3]) rows[3].textContent = t.step6.hardness;
+          if (t.step6.quantity && rows[4]) rows[4].textContent = t.step6.quantity;
+        }
+        const total = root.querySelector('.total .label');
+        if (total && t.step6.total) total.textContent = t.step6.total;
+      }
+    }
+    if (t.step7){
+      const root = document.querySelector('.step[data-step="7"]');
+      if (root){
+        const ta = root.querySelector('textarea');
+        if (ta && t.step7.placeholder) ta.placeholder = t.step7.placeholder;
+        const label = root.querySelector('label');
+        if (label && t.step7.label) label.textContent = t.step7.label;
+      }
+    }
+    if (t.step8){
+      const root = document.querySelector('.step[data-step="8"]');
+      if (root){
+        const map = [['name','name_label'],['phone','phone_label'],['email','email_label'],['address','address_label'],['city','city_label']];
+        map.forEach(([id, key])=>{
+          const lab = root.querySelector('label[for="'+id+'"]');
+          if (lab && t.step8[key]) lab.textContent = t.step8[key];
+        });
+        const thank = document.getElementById('thankyouText');
+        if (thank && t.step8.thankyou) thank.textContent = t.step8.thankyou;
+      }
+    }
+    if (t.notices){
+      const pick = document.getElementById('selfPickupNote');
+      if (pick && t.notices.self_pickup) pick.textContent = t.notices.self_pickup;
+      const pay = document.getElementById('paymentNote');
+      if (pay && t.notices.payment) pay.textContent = t.notices.payment;
+    }
+    if (t.cta && t.cta.whatsapp){
+      const btn = document.getElementById('submitBtn');
+      if (btn) btn.textContent = t.cta.whatsapp;
     }
   }catch(e){}
 }
-document.addEventListener('DOMContentLoaded', ()=>{ try{ applyTextsGeneric(); }catch(e){} });
 
-
-// v6.6 model image resolver (supports base64 or URL)
-function getModelImageSrc(m){
-  if (!m) return '';
-  if (m.imageUrl) return m.imageUrl;
-  if (m.image){
-    const s = String(m.image);
-    if (s.startsWith('data:')) return s;
-    if (/^[A-Za-z0-9+/=\s]+$/.test(s.slice(0,120))) return 'data:image/jpeg;base64,'+s;
-  }
-  return '';
-}
-
-
-// v6.6 selected model preview
-function renderSelectedModelCard(model){
-  const box = document.getElementById('selectedModelPreview');
-  if (!box) return;
-  if (!model){ box.style.display='none'; box.innerHTML=''; return; }
-  const imgSrc = getModelImageSrc(model);
-  const title = model.title || model.name || 'מודל';
-  const desc  = model.description || '';
-  box.innerHTML = `
-    <div class="preview-wrap" style="display:flex;gap:12px;align-items:flex-start">
-      ${imgSrc ? `<img src="${imgSrc}" alt="" style="width:96px;height:96px;object-fit:cover;border-radius:10px;border:1px solid #e5e7eb">` : ''}
-      <div>
-        <div style="font-weight:700">${title}</div>
-        ${desc ? `<div style="opacity:.8;font-size:.95rem">${desc}</div>` : ''}
-      </div>
-    </div>`;
-  box.style.display='block';
-}
-
-function syncSelectedModelFromStorage(){
+function placeMacaronBeforeBlack(){
   try{
-    const raw = localStorage.getItem('selectedModel');
-    if (!raw){ renderSelectedModelCard(null); return; }
-    const m = JSON.parse(raw);
-    renderSelectedModelCard(m && typeof m==='object' ? m : null);
-  }catch(e){ renderSelectedModelCard(null); }
+    const root = document.querySelector('.step[data-step="2"]');
+    if (!root) return;
+    const mac = root.querySelector('input[value="macaron"]');
+    const blk = root.querySelector('input[value="black"], input[value="black_unavailable"]');
+    const macLabel = mac && (mac.closest('label') || mac.parentElement);
+    const blkLabel = blk && (blk.closest('label') || blk.parentElement);
+    if (macLabel && blkLabel && macLabel.nextSibling !== blkLabel){
+      blkLabel.parentNode.insertBefore(macLabel, blkLabel);
+    }
+  }catch(e){}
 }
 
-// Update on load, and when storage changes across tabs
-document.addEventListener('DOMContentLoaded', ()=>{ try{ syncSelectedModelFromStorage(); }catch(e){} });
-window.addEventListener('storage', (e)=>{ if (e.key==='selectedModel') syncSelectedModelFromStorage(); });
-
-// Light polling fallback: after any click inside the models area, poll for a short time
-document.addEventListener('click', (e)=>{
-  if (!e.target.closest('.models, .gallery, .model-card, [data-model-index], [data-model-id]')) return;
-  let n=0; const id=setInterval(()=>{ syncSelectedModelFromStorage(); if(++n>10) clearInterval(id); }, 300);
-});
+document.addEventListener('DOMContentLoaded', ()=>{ try{ loadTexts(); }catch(e){} placeMacaronBeforeBlack(); });

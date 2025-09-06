@@ -31,25 +31,22 @@
     window.getModels = async function(){ return Array.isArray(window.EMBEDDED_MODELS) ? window.EMBEDDED_MODELS : []; };
   }
 </script>
-
-  <!-- Favicons -->
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
-  <link rel="icon" type="image/png" sizes="64x64" href="favicon-64x64.png">
-  <link rel="icon" type="image/png" sizes="128x128" href="favicon-128x128.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon-180x180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
-  <link rel="icon" type="image/png" sizes="256x256" href="favicon-256x256.png">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-
+<!-- Favicons -->
+<link href="favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+<link href="favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="favicon-48x48.png" rel="icon" sizes="48x48" type="image/png"/>
+<link href="favicon-64x64.png" rel="icon" sizes="64x64" type="image/png"/>
+<link href="favicon-128x128.png" rel="icon" sizes="128x128" type="image/png"/>
+<link href="favicon-180x180.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="favicon-192x192.png" rel="icon" sizes="192x192" type="image/png"/>
+<link href="favicon-256x256.png" rel="icon" sizes="256x256" type="image/png"/>
+<link href="favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
 <main class="container">
 <section class="hero">
 <img alt="תמונת הירו" src="hero.jpg"/>
 <div class="overlay">
-
 <h1>ברוכים הבאים למדפסת מרחוק</h1>
 <p>הדפסת תלת מימד לכל מטרה</p>
 </div>
@@ -78,7 +75,7 @@
 <h2>שלב 1 - תיאור המוצר</h2>
 <div class="new-model-wrap">
 <label>תארו בקצרה את ההדפסה המבוקשת, עד 400 תווים</label>
-<textarea id="desc" maxlength="400" placeholder="למשל: מחזיק מפתחות עם שם 'מעיין' בגודל קטן" rows="4" data-i18n="step1.desc_placeholder" data-i18n-attr="placeholder"></textarea>
+<textarea data-i18n="step1.desc_placeholder" data-i18n-attr="placeholder" id="desc" maxlength="400" placeholder="למשל: מחזיק מפתחות עם שם 'מעיין' בגודל קטן" rows="4"></textarea>
 <div class="small muted"><span id="descCount">0</span> / 400</div>
 <div class="mt">
 <label>העלאת תמונה להשראה או קובץ ייחוס</label>
@@ -95,7 +92,7 @@
 <label class="radio"><input name="color" type="radio" value="macaron"/> צבע מקרון - חדש!</label>
 <div class="custom-color">
 <label class="radio"><input name="color" type="radio" value="custom"/> צבע לבחירתך, ננסה לספק</label>
-<input class="input" disabled="" id="customColorText" placeholder="כתבו את שם הצבע" type="text"/ data-i18n="step2.custom_placeholder" data-i18n-attr="placeholder">
+<input class="input" data-i18n="step2.custom_placeholder" data-i18n-attr="placeholder" disabled="" id="customColorText" placeholder="כתבו את שם הצבע" type="text"/>
 </div>
 </div>
 <!-- Step 3 -->
@@ -104,9 +101,9 @@
 <div class="grid">
 <div>
 <label>רוחב במ"מ</label>
-<input id="width" max="100" min="1" type="number" value="50"/>
+<input id="width" max="100" min="1" type="number" value="50">
 <div class="small note-red">המחיר של ההדפסה יהיה תלוי בגודל המוצר</div>
-</div>
+</input></div>
 <div>
 <label>גובה במ"מ</label>
 <input id="height" max="100" min="1" type="number" value="50"/>
@@ -116,22 +113,21 @@
 </div>
 <!-- Step 4 -->
 <div class="step" data-step="4">
-<h2>שלב 4 - קשיחות המוצר</h2>
-<label class="radio"><input checked="" name="difficulty" type="radio" value="under50"/> קלה (לנוי)</label>
-<label class="radio"><input name="difficulty" type="radio" value="above50"/> בינונית (לשימוש)</label>
-<label class="radio"><input name="difficulty" type="radio" value="full100"/> חייב להחזיק משקל</label>
-<p class="small note-red">המחיר של ההדפסה יהיה תלוי בקשיחות המוצר</p>
+<h2 data-title="">שלב 4 - קשיחות המוצר</h2>
+<label class="radio" data-i18n="opt_light"><input checked="" name="difficulty" type="radio" value="under50"/> רגילה </label>
+<label class="radio" data-i18n="opt_mid"><input name="difficulty" type="radio" value="above50"/> בינונית </label>
+<label class="radio" data-i18n="opt_strong"><input name="difficulty" type="radio" value="full100"/> חייב להחזיק משקל</label>
+<p class="small note-red" data-i18n="note">המחיר של ההדפסה יהיה תלוי בקשיחות המוצר</p>
 </div>
 <!-- Step 5 -->
 <div class="step" data-step="5">
-<h2>שלב 5 - רזולוציה</h2>
-<label class="radio"><input name="resolution" type="radio" value="low"/> נמוכה</label>
-<label class="radio"><input checked="" name="resolution" type="radio" value="medium"/> בינונית (מומלץ)</label>
-<label class="radio"><input name="resolution" type="radio" value="high"/> גבוהה (לעבודות עדינות בלבד)</label>
+<h2 data-title="">שלב 5 - רזולוציה</h2>
+<label class="radio" data-i18n="low"><input name="resolution" type="radio" value="low"/> נמוכה</label>
+<label class="radio" data-i18n="medium"><input checked="" name="resolution" type="radio" value="medium"/> בינונית (מומלץ)</label>
+<label class="radio" data-i18n="high"><input name="resolution" type="radio" value="high"/> גבוהה (לעבודות עדינות בלבד)</label>
 </div>
 <!-- Step 6 -->
-
-<div id="selectedModelPreview" class="model-preview card" style="display:none;margin:16px 0;"></div>
+<div class="model-preview card" id="selectedModelPreview" style="display:none;margin:16px 0;"></div>
 <div class="step" data-step="6">
 <h2>שלב 6 - מחיר</h2>
 <div class="price-box" id="priceBox">
@@ -179,7 +175,7 @@
 <hr/>
 <div class="row total"><span>סה"כ</span><span id="totalPrice2">0</span></div>
 </div>
-<button class="btn whatsapp full mt whatsapp-wide" id="submitBtn" data-i18n="cta.whatsapp"><span aria-hidden="true" class="wa-icon">
+<button class="btn-primary whatsapp mt btn full whatsapp-wide" data-cta="whatsapp" data-i18n="cta.whatsapp" id="submitBtn"><span aria-hidden="true" class="wa-icon">
 <svg fill="currentColor" focusable="false" height="20" role="img" viewbox="0 0 32 32" width="20">
 <path d="M19.11 17.43c-.27-.14-1.6-.8-1.84-.89-.24-.09-.42-.14-.6.14-.18.27-.69.89-.85 1.07-.16.18-.31.2-.58.07-.27-.14-1.13-.42-2.15-1.34-.79-.7-1.32-1.57-1.47-1.84-.15-.27-.02-.42.11-.56.12-.12.27-.31.4-.47.13-.16.18-.27.27-.45.09-.18.05-.34-.02-.47-.07-.14-.6-1.45-.82-1.98-.22-.53-.44-.46-.6-.46-.16 0-.34-.02-.52-.02s-.47.07-.72.34c-.25.27-.95.93-.95 2.28 0 1.35.98 2.65 1.12 2.83.14.18 1.93 2.95 4.67 4.02.65.28 1.16.45 1.56.58.65.21 1.24.18 1.71.11.52-.08 1.6-.65 1.83-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32z"></path><path d="M16.01 2.93C9.4 2.93 4.03 8.3 4.03 14.91c0 2.34.77 4.5 2.07 6.26L4 29.07l7.03-2.04c1.7.93 3.65 1.46 5.72 1.46 6.61 0 11.98-5.37 11.98-11.98S22.62 2.93 16.01 2.93zm0 21.6c-1.85 0-3.58-.54-5.02-1.47l-.36-.23-4.17 1.21 1.2-4.06-.24-.37c-1.18-1.63-1.87-3.64-1.87-5.8 0-5.46 4.44-9.9 9.9-9.9s9.9 4.44 9.9 9.9-4.44 9.9-9.9 9.9z"></path>
 </svg>
@@ -204,7 +200,7 @@
   {"id":"boat","title":"boat","description":"מודל סירה בסיסי 25 מ״מ על 25 מ״מ","image":"boat.jpeg","price":30}
 ];</script>
 <script>(function(){try{var h=localStorage.getItem("adminHeroImage");if(h){var img=document.querySelector(".hero img"); if(img) img.src=h;}}catch(e){}})();</script>
-<script src="script.js?v=6.7.2"></script>
+<script>initTexts("./data/texts.json");</script><script src="update_texts.js"></script><script src="script.js?v=6.7.2"></script>
 <!-- WhatsApp summary logic v1 -->
 <script>
 (function(){
@@ -440,10 +436,6 @@
   else bind();
 })();
 </script>
-
-
-
-
 <footer class="site-footer"><span id="siteVersion"></span></footer>
 </body>
 </html>
